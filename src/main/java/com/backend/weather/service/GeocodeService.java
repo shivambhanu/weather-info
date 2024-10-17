@@ -10,17 +10,23 @@ import org.json.JSONObject;
 public class GeocodeService {
     private final String API_KEY = "670fb2eb0b393864048573wdqad738e";
 
-    public String getLatLong(String pincode) throws JSONException {
+    public double[] getLatLong(String pincode) throws JSONException {
         RestTemplate restTemplate = new RestTemplate();
         String url = "https://geocode.maps.co/search?q="+ pincode + "&api_key=" + API_KEY;
         String response = restTemplate.getForObject(url, String.class);
 
 
         JSONObject json = new JSONObject(response);
-        if (json.has("current")) {
-            return json.getJSONObject("current").toString();  // Return JSON as String
+        if (json.getJSONArray("results").length() > 0) {
+            JSONObject location = json.getJSONArray("results")
+                    .getJSONObject(0)
+                    .getJSONObject("geometry")
+                    .getJSONObject("location");
+            double lat = location.getDouble("lat");
+            double lon = location.getDouble("lng");
+            return new double[]{lat, lon};
         } else {
-            throw new IllegalArgumentException("Weather information not available for this date");
+            throw new IllegalArgumentException("Invalid pincode or no location found");
         }
     }
 }
