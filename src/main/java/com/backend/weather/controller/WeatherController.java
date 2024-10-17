@@ -1,6 +1,6 @@
 package com.backend.weather.controller;
 
-import com.backend.weather.model.WeatherInfo;
+import com.backend.weather.entity.WeatherInfo;
 import com.backend.weather.repository.WeatherRepository;
 import com.backend.weather.service.GeocodeService;
 import com.backend.weather.service.WeatherService;
