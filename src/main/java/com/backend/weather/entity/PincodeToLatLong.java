@@ -14,7 +14,7 @@ public class PincodeToLatLong {
     @Id
     private String pincode;
 
-    private Long latitude;
+    private double latitude;
 
-    private Long longitude;
+    private double longitude;
 }
