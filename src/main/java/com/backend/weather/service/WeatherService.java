@@ -12,13 +12,11 @@ public class WeatherService {
     private Dotenv dotenv = Dotenv.load();
     private String openweatherApiKey = dotenv.get("OPENWEATHER_API_KEY");
 
-    public WeatherResponse getWeatherInfo(double lat, double lon, LocalDate date) {
-        RestTemplate restTemplate = new RestTemplate();
-        long timestamp = date.atStartOfDay().toEpochSecond(java.time.ZoneOffset.UTC);
-
+    public WeatherResponse getWeatherInfo(double lat, double lon) {
         //  https://api.openweathermap.org/data/2.5/weather?lat=57&lon=-2.15&appid=9ca1b469920197a4d21d30bae7c388f4
          String url = "https://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&appid="+openweatherApiKey;
 
+        RestTemplate restTemplate = new RestTemplate();
         WeatherResponse weatherResponse = restTemplate.getForObject(url, WeatherResponse.class);
         System.out.println("Weather Response: " + weatherResponse);
 
