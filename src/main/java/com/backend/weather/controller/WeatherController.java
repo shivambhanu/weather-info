@@ -29,19 +29,14 @@ public class WeatherController {
 
         // Save new weather data to DB
         Weather newWeather = new Weather(
-                weatherResponse.getCoord().getLat(),
-                weatherResponse.getCoord().getLon(),
-
                 weatherResponse.getWeather().get(0).getMain(),
                 weatherResponse.getWeather().get(0).getDescription(),
-
                 weatherResponse.getMain().getTemp(),
                 weatherResponse.getMain().getFeels_like(),
                 weatherResponse.getMain().getTemp_min(),
                 weatherResponse.getMain().getTemp_max(),
                 weatherResponse.getMain().getPressure(),
                 weatherResponse.getMain().getHumidity(),
-
                 weatherResponse.getWind().getSpeed()
         );
 

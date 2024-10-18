@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Weather {
-    private double latitude;
-    private double longitude;
     private String main;
     private String description;
     private double temperature;
