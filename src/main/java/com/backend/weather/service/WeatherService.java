@@ -1,30 +1,27 @@
 package com.backend.weather.service;
-
-import org.json.JSONException;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.json.JSONObject;
 
 import java.time.LocalDate;
 
 @Service
 public class WeatherService {
 
-    private final String OPENWEATHER_API_KEY = "your_openweather_api_key";
+    private Dotenv dotenv = Dotenv.load();
+    private String openweatherApiKey = dotenv.get("OPENWEATHER_API_KEY");
 
-    public String getWeatherInfo(double lat, double lon, LocalDate date) throws JSONException {
+    public String getWeatherInfo(double lat, double lon, LocalDate date) {
         RestTemplate restTemplate = new RestTemplate();
         long timestamp = date.atStartOfDay().toEpochSecond(java.time.ZoneOffset.UTC);
-        String url = "http://api.openweathermap.org/data/2.5/onecall/timemachine?lat=" + lat +
-                "&lon=" + lon + "&dt=" + timestamp + "&appid=" + OPENWEATHER_API_KEY;
+
+
+        // https://history.openweathermap.org/data/3.0/history/timemachine?lat={lat}&lon={lon}&dt={dt}&appid={API_KEY}
+         String url = "https://history.openweathermap.org/data/3.0/history/timemachine?lat="+lat+"&lon="+lon+"&dt="+date+"&appid="+openweatherApiKey;
 
         String response = restTemplate.getForObject(url, String.class);
-        JSONObject json = new JSONObject(response);
+        System.out.println(response);
 
-        if (json.has("current")) {
-            return json.getJSONObject("current").toString();  // Return JSON as String
-        } else {
-            throw new IllegalArgumentException("Weather information not available for this date");
-        }
+        return "filler";
     }
 }

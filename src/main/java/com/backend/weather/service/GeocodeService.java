@@ -1,32 +1,22 @@
 package com.backend.weather.service;
-
-import org.json.JSONException;
+import com.backend.weather.dto.GeocodeResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.json.JSONObject;
 
+import io.github.cdimascio.dotenv.Dotenv;
 
 @Service
 public class GeocodeService {
-    private final String API_KEY = "670fb2eb0b393864048573wdqad738e";
+    private Dotenv dotenv = Dotenv.load();
+    private String geocodingApiKey = dotenv.get("OPENWEATHER_API_KEY");
 
-    public double[] getLatLong(String pincode) throws JSONException {
+    public GeocodeResponse getLatLong(String pincode) {
+        String url = "https://api.openweathermap.org/geo/1.0/zip?zip="+ pincode +",IN&appid=" + geocodingApiKey;
+//      Example:  https://api.openweathermap.org/geo/1.0/zip?zip=852201,IN&appid=9ca1b469920197a4d21d30bae7c388f4
+
         RestTemplate restTemplate = new RestTemplate();
-        String url = "https://geocode.maps.co/search?q="+ pincode + "&api_key=" + API_KEY;
-        String response = restTemplate.getForObject(url, String.class);
+        GeocodeResponse geoRes = restTemplate.getForObject(url, GeocodeResponse.class);
 
-
-        JSONObject json = new JSONObject(response);
-        if (json.getJSONArray("results").length() > 0) {
-            JSONObject location = json.getJSONArray("results")
-                    .getJSONObject(0)
-                    .getJSONObject("geometry")
-                    .getJSONObject("location");
-            double lat = location.getDouble("lat");
-            double lon = location.getDouble("lng");
-            return new double[]{lat, lon};
-        } else {
-            throw new IllegalArgumentException("Invalid pincode or no location found");
-        }
+        return geoRes;
     }
 }
