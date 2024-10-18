@@ -8,12 +8,12 @@ import com.backend.weather.service.WeatherService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
@@ -64,7 +64,7 @@ public class WeatherControllerTest {
         try {
             // Convert JSON string to WeatherResponse object
             WeatherResponse weatherResponse = objectMapper.readValue(json, WeatherResponse.class);
-            System.out.println(weatherResponse);
+//            System.out.println(weatherResponse);
 
             Mockito.when(geocodeService.getLatLong("852201")).thenReturn(new PincodeToLatLong("852201", 25.875, 86.5961));
 
@@ -72,6 +72,10 @@ public class WeatherControllerTest {
 
             Weather weather = weatherController.getWeatherInfo("852201");
             assertNotNull(weather);
+            assertEquals("Clear", weather.getMain());
+            assertEquals("clear sky", weather.getDescription());
+            assertEquals(296.95, weather.getTemperature());
+
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
